@@ -1,15 +1,20 @@
-# Zen MCP: Many Workflows. One Context.
+# PAL MCP: Many Workflows. One Context.
 
 <div align="center">
 
-  [Zen in action](https://github.com/user-attachments/assets/0d26061e-5f21-4ab1-b7d0-f883ddc2c3da)
+  <em>Your AI's PAL – a Provider Abstraction Layer</em><br />
+  <sub><a href="docs/name-change.md">Formerly known as Zen MCP</a></sub>
+
+  [PAL in action](https://github.com/user-attachments/assets/0d26061e-5f21-4ab1-b7d0-f883ddc2c3da)
+
+👉 **[Watch more examples](#-watch-tools-in-action)**
 
 ### Your CLI + Multiple Models = Your AI Dev Team
 
-**Use the 🤖 CLI you love:**
-[Claude Code](https://www.anthropic.com/claude-code) · [Gemini CLI](https://github.com/google-gemini/gemini-cli) · [Codex CLI](https://github.com/openai/codex) · [Qwen Code CLI](https://qwenlm.github.io/qwen-code-docs/) · _and more_
+**Use the 🤖 CLI you love:**  
+[Claude Code](https://www.anthropic.com/claude-code) · [Gemini CLI](https://github.com/google-gemini/gemini-cli) · [Codex CLI](https://github.com/openai/codex) · [Qwen Code CLI](https://qwenlm.github.io/qwen-code-docs/) · [Cursor](https://cursor.com) · _and more_
 
-**With multiple models:**
+**With multiple models within a single prompt:**  
 Gemini · OpenAI · Anthropic · Grok · Azure · Ollama · OpenRouter · DIAL · On-Device Model
 
 </div>
@@ -20,8 +25,8 @@ Gemini · OpenAI · Anthropic · Grok · Azure · Ollama · OpenRouter · DIAL �
 
 The new **[`clink`](docs/tools/clink.md)** (CLI + Link) tool connects external AI CLIs directly into your workflow:
 
-- **Connect external CLIs** like [Gemini CLI](https://github.com/google-gemini/gemini-cli) and [Codex CLI](https://github.com/openai/codex) directly into your workflow
-- **Codex Subagents** - Launch isolated Codex instances from _within_ Codex itself! Offload heavy tasks (code reviews, bug hunting) to fresh contexts while your main session's context window remains unpolluted. Each subagent returns only final results.
+- **Connect external CLIs** like [Gemini CLI](https://github.com/google-gemini/gemini-cli), [Codex CLI](https://github.com/openai/codex), and [Claude Code](https://www.anthropic.com/claude-code) directly into your workflow
+- **CLI Subagents** - Launch isolated CLI instances from _within_ your current CLI! Claude Code can spawn Codex subagents, Codex can spawn Gemini CLI subagents, etc. Offload heavy tasks (code reviews, bug hunting) to fresh contexts while your main session's context window remains unpolluted. Each subagent returns only final results.
 - **Context Isolation** - Run separate investigations without polluting your primary workspace
 - **Role Specialization** - Spawn `planner`, `codereviewer`, or custom role agents with specialized system prompts
 - **Full CLI Capabilities** - Web search, file inspection, MCP tool access, latest documentation lookups
@@ -42,24 +47,24 @@ Continue with clink gemini - implement the recommended feature
 
 ---
 
-## Why Zen MCP?
+## Why PAL MCP?
 
 **Why rely on one AI model when you can orchestrate them all?**
 
 A Model Context Protocol server that supercharges tools like [Claude Code](https://www.anthropic.com/claude-code), [Codex CLI](https://developers.openai.com/codex/cli), and IDE clients such
-as [Cursor](https://cursor.com) or the [Claude Dev VS Code extension](https://marketplace.visualstudio.com/items?itemName=Anthropic.claude-vscode). **Zen MCP connects your favorite AI tool
+as [Cursor](https://cursor.com) or the [Claude Dev VS Code extension](https://marketplace.visualstudio.com/items?itemName=Anthropic.claude-vscode). **PAL MCP connects your favorite AI tool
 to multiple AI models** for enhanced code analysis, problem-solving, and collaborative development.
 
 ### True AI Collaboration with Conversation Continuity
 
-Zen supports **conversation threading** so your CLI can **discuss ideas with multiple AI models, exchange reasoning, get second opinions, and even run collaborative debates between models** to help you reach deeper insights and better solutions.
+PAL supports **conversation threading** so your CLI can **discuss ideas with multiple AI models, exchange reasoning, get second opinions, and even run collaborative debates between models** to help you reach deeper insights and better solutions.
 
 Your CLI always stays in control but gets perspectives from the best AI for each subtask. Context carries forward seamlessly across tools and models, enabling complex workflows like: code reviews with multiple models → automated planning → implementation → pre-commit validation.
 
 > **You're in control.** Your CLI of choice orchestrates the AI team, but you decide the workflow. Craft powerful prompts that bring in Gemini Pro, GPT 5, Flash, or local offline models exactly when needed.
 
 <details>
-<summary><b>Reasons to Use Zen MCP</b></summary>
+<summary><b>Reasons to Use PAL MCP</b></summary>
 
 A typical workflow with Claude Code as an example:
 
@@ -109,7 +114,7 @@ and review into consideration to aid with its final pre-commit review.
 **Think of it as Claude Code _for_ Claude Code.** This MCP isn't magic. It's just **super-glue**.
 
 > **Remember:** Claude stays in full control — but **YOU** call the shots.
-> Zen is designed to have Claude engage other models only when needed — and to follow through with meaningful back-and-forth.
+> PAL is designed to have Claude engage other models only when needed — and to follow through with meaningful back-and-forth.
 > **You're** the one who crafts the powerful prompt that makes Claude bring in Gemini, Flash, O3 — or fly solo.
 > You're the guide. The prompter. The puppeteer.
 > #### You are the AI - **Actually Intelligent**.
@@ -123,7 +128,7 @@ and review into consideration to aid with its final pre-commit review.
 For best results when using [Claude Code](https://claude.ai/code):  
 
 - **Sonnet 4.5** - All agentic work and orchestration
-- **Gemini 2.5 Pro** - Deep thinking, additional code reviews, debugging and validations, pre-commit analysis
+- **Gemini 3.0 Pro** OR **GPT-5.2 / Pro** - Deep thinking, additional code reviews, debugging and validations, pre-commit analysis
 </details>
 
 <details>
@@ -131,8 +136,8 @@ For best results when using [Claude Code](https://claude.ai/code):
 
 For best results when using [Codex CLI](https://developers.openai.com/codex/cli):  
 
-- **GPT-5 Codex Medium** - All agentic work and orchestration
-- **Gemini 2.5 Pro** - Deep thinking, additional code reviews, debugging and validations, pre-commit analysis
+- **GPT-5.2 Codex Medium** - All agentic work and orchestration
+- **Gemini 3.0 Pro** OR **GPT-5.2-Pro** - Deep thinking, additional code reviews, debugging and validations, pre-commit analysis
 </details>
 
 ## Quick Start (5 minutes)
@@ -152,8 +157,8 @@ For best results when using [Codex CLI](https://developers.openai.com/codex/cli)
 
 **Option A: Clone and Automatic Setup** (recommended)
 ```bash
-git clone https://github.com/BeehiveInnovations/zen-mcp-server.git
-cd zen-mcp-server
+git clone https://github.com/BeehiveInnovations/pal-mcp-server.git
+cd pal-mcp-server
 
 # Handles everything: setup, config, API keys from system environment. 
 # Auto-configures Claude Desktop, Claude Code, Gemini CLI, Codex CLI, Qwen CLI
@@ -167,9 +172,9 @@ cd zen-mcp-server
 // Don't forget to add your API keys under env
 {
   "mcpServers": {
-    "zen": {
+    "pal": {
       "command": "bash",
-      "args": ["-c", "for p in $(which uvx 2>/dev/null) $HOME/.local/bin/uvx /opt/homebrew/bin/uvx /usr/local/bin/uvx uvx; do [ -x \"$p\" ] && exec \"$p\" --from git+https://github.com/BeehiveInnovations/zen-mcp-server.git zen-mcp-server; done; echo 'uvx not found' >&2; exit 1"],
+      "args": ["-c", "for p in $(which uvx 2>/dev/null) $HOME/.local/bin/uvx /opt/homebrew/bin/uvx /usr/local/bin/uvx uvx; do [ -x \"$p\" ] && exec \"$p\" --from git+https://github.com/BeehiveInnovations/pal-mcp-server.git pal-mcp-server; done; echo 'uvx not found' >&2; exit 1"],
       "env": {
         "PATH": "/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin:~/.local/bin",
         "GEMINI_API_KEY": "your-key-here",
@@ -183,18 +188,19 @@ cd zen-mcp-server
 
 **3. Start Using!**
 ```
-"Use zen to analyze this code for security issues with gemini pro"
+"Use pal to analyze this code for security issues with gemini pro"
 "Debug this error with o3 and then get flash to suggest optimizations"
-"Plan the migration strategy with zen, get consensus from multiple models"
+"Plan the migration strategy with pal, get consensus from multiple models"
 "clink with cli_name=\"gemini\" role=\"planner\" to draft a phased rollout plan"
 ```
 
-👉 **[Complete Setup Guide](docs/getting-started.md)** with detailed installation, configuration for Gemini / Codex / Qwen, and troubleshooting  
+👉 **[Complete Setup Guide](docs/getting-started.md)** with detailed installation, configuration for Gemini / Codex / Qwen, and troubleshooting
 👉 **[Cursor & VS Code Setup](docs/getting-started.md#ide-clients)** for IDE integration instructions
+📺 **[Watch tools in action](#-watch-tools-in-action)** to see real-world examples
 
 ## Provider Configuration
 
-Zen activates any provider that has credentials in your `.env`. See `.env.example` for deeper customization.
+PAL activates any provider that has credentials in your `.env`. See `.env.example` for deeper customization.
 
 ## Core Tools
 
@@ -202,7 +208,7 @@ Zen activates any provider that has credentials in your `.env`. See `.env.exampl
 
 **Collaboration & Planning** *(Enabled by default)*
 - **[`clink`](docs/tools/clink.md)** - Bridge requests to external AI CLIs (Gemini planner, codereviewer, etc.)
-- **[`chat`](docs/tools/chat.md)** - Brainstorm ideas, get second opinions, validate approaches
+- **[`chat`](docs/tools/chat.md)** - Brainstorm ideas, get second opinions, validate approaches. With capable models (GPT-5.2 Pro, Gemini 3.0 Pro), generates complete code / implementation
 - **[`thinkdeep`](docs/tools/thinkdeep.md)** - Extended reasoning, edge case analysis, alternative perspectives
 - **[`planner`](docs/tools/planner.md)** - Break down complex projects into structured, actionable plans
 - **[`consensus`](docs/tools/consensus.md)** - Get expert opinions from multiple AI models with stance steering
@@ -262,7 +268,7 @@ DISABLED_TOOLS=
 // In ~/.claude/settings.json or .mcp.json
 {
   "mcpServers": {
-    "zen": {
+    "pal": {
       "env": {
         // Tool configuration
         "DISABLED_TOOLS": "refactor,testgen,secaudit,docgen,tracer",
@@ -289,7 +295,7 @@ DISABLED_TOOLS=
 // Remove or empty the DISABLED_TOOLS to enable everything
 {
   "mcpServers": {
-    "zen": {
+    "pal": {
       "env": {
         "DISABLED_TOOLS": ""
       }
@@ -298,10 +304,71 @@ DISABLED_TOOLS=
 }
 ```
 
-**Note:** 
+**Note:**
 - Essential tools (`version`, `listmodels`) cannot be disabled
 - After changing tool configuration, restart your Claude session for changes to take effect
 - Each tool adds to context window usage, so only enable what you need
+
+</details>
+
+## 📺 Watch Tools In Action
+
+<details>
+<summary><b>Chat Tool</b> - Collaborative decision making and multi-turn conversations</summary>
+
+**Picking Redis vs Memcached:**
+
+[Chat Redis or Memcached_web.webm](https://github.com/user-attachments/assets/41076cfe-dd49-4dfc-82f5-d7461b34705d)
+
+**Multi-turn conversation with continuation:**
+
+[Chat With Gemini_web.webm](https://github.com/user-attachments/assets/37bd57ca-e8a6-42f7-b5fb-11de271e95db)
+
+</details>
+
+<details>
+<summary><b>Consensus Tool</b> - Multi-model debate and decision making</summary>
+
+**Multi-model consensus debate:**
+
+[PAL Consensus Debate](https://github.com/user-attachments/assets/76a23dd5-887a-4382-9cf0-642f5cf6219e)
+
+</details>
+
+<details>
+<summary><b>PreCommit Tool</b> - Comprehensive change validation</summary>
+
+**Pre-commit validation workflow:**
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/584adfa6-d252-49b4-b5b0-0cd6e97fb2c6" width="950">
+</div>
+
+</details>
+
+<details>
+<summary><b>API Lookup Tool</b> - Current vs outdated API documentation</summary>
+
+**Without PAL - outdated APIs:**
+
+[API without PAL](https://github.com/user-attachments/assets/01a79dc9-ad16-4264-9ce1-76a56c3580ee)
+
+**With PAL - current APIs:**
+
+[API with PAL](https://github.com/user-attachments/assets/5c847326-4b66-41f7-8f30-f380453dce22)
+
+</details>
+
+<details>
+<summary><b>Challenge Tool</b> - Critical thinking vs reflexive agreement</summary>
+
+**Without PAL:**
+
+![without_pal@2x](https://github.com/user-attachments/assets/64f3c9fb-7ca9-4876-b687-25e847edfd87)
+
+**With PAL:**
+
+![with_pal@2x](https://github.com/user-attachments/assets/9d72f444-ba53-4ab1-83e5-250062c6ee70)
 
 </details>
 
@@ -315,7 +382,7 @@ DISABLED_TOOLS=
 
 **Model Support**
 - **Multiple providers** - Gemini, OpenAI, Azure, X.AI, OpenRouter, DIAL, Ollama
-- **Latest models** - GPT-5, Gemini 2.5 Pro, O3, Grok-4, local Llama
+- **Latest models** - GPT-5, Gemini 3.0 Pro, O3, Grok-4, local Llama
 - **[Thinking modes](docs/advanced-usage.md#thinking-modes)** - Control reasoning depth vs cost
 - **Vision support** - Analyze images, diagrams, screenshots
 
@@ -380,4 +447,4 @@ Built with the power of **Multi-Model AI** collaboration 🤝
 
 ### Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=BeehiveInnovations/zen-mcp-server&type=Date)](https://www.star-history.com/#BeehiveInnovations/zen-mcp-server&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=BeehiveInnovations/pal-mcp-server&type=Date)](https://www.star-history.com/#BeehiveInnovations/pal-mcp-server&Date)

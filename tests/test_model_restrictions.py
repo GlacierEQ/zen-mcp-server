@@ -6,7 +6,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from providers.gemini import GeminiModelProvider
-from providers.openai_provider import OpenAIModelProvider
+from providers.openai import OpenAIModelProvider
 from providers.shared import ProviderType
 from utils.model_restrictions import ModelRestrictionService
 
@@ -74,7 +74,7 @@ class TestModelRestrictionService:
                 # Check Google models
                 assert service.is_allowed(ProviderType.GOOGLE, "flash")
                 assert service.is_allowed(ProviderType.GOOGLE, "pro")
-                assert service.is_allowed(ProviderType.GOOGLE, "gemini-2.5-pro")
+                assert service.is_allowed(ProviderType.GOOGLE, "gemini-3-pro-preview")
 
     def test_case_insensitive_and_whitespace_handling(self):
         """Test that model names are case-insensitive and whitespace is trimmed."""
@@ -767,7 +767,7 @@ class TestAutoModeWithRestrictions:
             # Clear registry and register only OpenAI and Gemini providers
             ModelProviderRegistry._instance = None
             from providers.gemini import GeminiModelProvider
-            from providers.openai_provider import OpenAIModelProvider
+            from providers.openai import OpenAIModelProvider
 
             ModelProviderRegistry.register_provider(ProviderType.OPENAI, OpenAIModelProvider)
             ModelProviderRegistry.register_provider(ProviderType.GOOGLE, GeminiModelProvider)

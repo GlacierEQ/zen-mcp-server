@@ -4,7 +4,7 @@
 
 The `clink` tool transforms your CLI into a multi-agent orchestrator. Launch isolated Codex instances from _within_ Codex, delegate to Gemini's 1M context, or run specialized Claude agents—all while preserving conversation continuity. Instead of context-switching or token bloat, spawn fresh subagents that handle complex tasks in isolation and return only the results you need.
 
-> **CAUTION**: Clink launches real CLI agents with their safety prompts disabled (`--yolo`, `--dangerously-skip-permissions`, `--dangerously-bypass-approvals-and-sandbox`) so they can edit files and run tools autonomously via MCP. If that’s more access than you want, remove those flags—the CLI can still open/read files and report findings, it just won’t auto-apply edits. You can also tighten role prompts or system prompts with stop-words/guardrails, or disable clink entirely. Otherwise, keep the shipped presets confined to workspaces you fully trust.
+> **CAUTION**: Clink launches real CLI agents with relaxed permission flags (Gemini ships with `--yolo`, Codex with `--dangerously-bypass-approvals-and-sandbox`, Claude with `--permission-mode acceptEdits`) so they can edit files and run tools autonomously via MCP. If that’s more access than you want, remove those flags—the CLI can still open/read files and report findings, it just won’t auto-apply edits. You can also tighten role prompts or system prompts with stop-words/guardrails, or disable clink entirely. Otherwise, keep the shipped presets confined to workspaces you fully trust.
 
 ## Why Use Clink (CLI + Link)?
 
@@ -22,6 +22,8 @@ The subagent:
 - Performs deep analysis using its own MCP tools and web search
 - Returns **only the final security report** (not intermediate steps)
 - Your main session stays **laser-focused** on debugging
+
+**Works with any supported CLI**: Codex can spawn Codex / Claude Code / Gemini CLI subagents, or mix and match between different CLIs.
 
 ---
 
@@ -51,7 +53,7 @@ Gemini receives the full conversation context from `consensus` including the con
 - **Role-based prompts**: Pre-configured roles for planning, code review, or general questions
 - **Full CLI capabilities**: Gemini can use its own web search, file tools, and latest features
 - **Token efficiency**: File references (not full content) to conserve tokens
-- **Cross-tool collaboration**: Combine with other Zen tools like `planner` → `clink` → `codereview`
+- **Cross-tool collaboration**: Combine with other PAL tools like `planner` → `clink` → `codereview`
 - **Free tier available**: Gemini offers 1,000 requests/day free with a personal Google account - great for cost savings across tools
 
 ## Available Roles
@@ -76,7 +78,7 @@ You can make your own custom roles in `conf/cli_clients/` or tweak any of the sh
 ## Tool Parameters
 
 - `prompt`: Your question or task for the external CLI (required)
-- `cli_name`: Which CLI to use - `gemini` (default), or add your own in `conf/cli_clients/`
+- `cli_name`: Which CLI to use - `gemini` (default), `claude`, `codex`, or add your own in `conf/cli_clients/`
 - `role`: Preset role - `default`, `planner`, `codereviewer` (default: `default`)
 - `files`: Optional file paths for context (references only, CLI opens files itself)
 - `images`: Optional image paths for visual context
@@ -118,18 +120,18 @@ then codereview to verify the implementation"
 ## How Clink Works
 
 1. **Your request** - You ask your current CLI to use `clink` with a specific CLI and role
-2. **Background execution** - Zen spawns the configured CLI (e.g., `gemini --output-format json`)
+2. **Background execution** - PAL spawns the configured CLI (e.g., `gemini --output-format json`)
 3. **Context forwarding** - Your prompt, files (as references), and conversation history are sent as part of the prompt
 4. **CLI processing** - Gemini (or other CLI) uses its own tools: web search, file access, thinking modes
 5. **Seamless return** - Results flow back into your conversation with full context preserved
-6. **Continuation support** - Future tools and models can reference Gemini's findings via [continuation support](../context-revival.md) within Zen. 
+6. **Continuation support** - Future tools and models can reference Gemini's findings via [continuation support](../context-revival.md) within PAL.
 
 ## Best Practices
 
 - **Pre-authenticate CLIs**: Install and configure Gemini CLI first (`npm install -g @google/gemini-cli`)
 - **Choose appropriate roles**: Use `planner` for strategy, `codereviewer` for code, `default` for general questions
 - **Leverage CLI strengths**: Gemini's 1M context for large codebases, web search for current docs
-- **Combine with Zen tools**: Chain `clink` with `planner`, `codereview`, `debug` for powerful workflows
+- **Combine with PAL tools**: Chain `clink` with `planner`, `codereview`, `debug` for powerful workflows
 - **File efficiency**: Pass file paths, let the CLI decide what to read (saves tokens)
 
 ## Configuration
@@ -137,7 +139,7 @@ then codereview to verify the implementation"
 Clink configurations live in `conf/cli_clients/`. We ship presets for the supported CLIs:
 
 - `gemini.json` – runs `gemini --telemetry false --yolo -o json`
-- `claude.json` – runs `claude --print --output-format json --permission-mode bypassPermissions --dangerously-skip-permissions`
+- `claude.json` – runs `claude --print --output-format json --permission-mode acceptEdits --model sonnet`
 - `codex.json` – runs `codex exec --json --dangerously-bypass-approvals-and-sandbox`
 
 > **CAUTION**: These flags intentionally bypass each CLI's safety prompts so they can edit files or launch tools autonomously via MCP. Only enable them in trusted sandboxes and tailor role prompts or CLI configs if you need more guardrails.
@@ -151,21 +153,22 @@ Each preset points to role-specific prompts in `systemprompts/clink/`. Duplicate
 ## When to Use Clink vs Other Tools
 
 - **Use `clink`** for: Leveraging external CLI capabilities (Gemini's web search, 1M context), specialized CLI features, cross-CLI collaboration
-- **Use `chat`** for: Direct model-to-model conversations within Zen
-- **Use `planner`** for: Zen's native planning workflows with step validation
-- **Use `codereview`** for: Zen's structured code review with severity levels
+- **Use `chat`** for: Direct model-to-model conversations within PAL
+- **Use `planner`** for: PAL's native planning workflows with step validation
+- **Use `codereview`** for: PAL's structured code review with severity levels
 
 ## Setup Requirements
 
 Ensure the relevant CLI is installed and configured:
 
+- [Claude Code](https://www.anthropic.com/claude-code)
 - [Gemini CLI](https://github.com/google-gemini/gemini-cli)
 - [Codex CLI](https://docs.sourcegraph.com/codex)
 
 ## Related Guides
 
 - [Chat Tool](chat.md) - Direct model conversations
-- [Planner Tool](planner.md) - Zen's native planning workflows
+- [Planner Tool](planner.md) - PAL's native planning workflows
 - [CodeReview Tool](codereview.md) - Structured code reviews
 - [Context Revival](../context-revival.md) - Continuing conversations across tools
 - [Advanced Usage](../advanced-usage.md) - Complex multi-tool workflows

@@ -1,6 +1,6 @@
 # Custom Models & API Setup
 
-This guide covers setting up multiple AI model providers including OpenRouter, custom API endpoints, and local model servers. The Zen MCP server supports a unified configuration for all these providers through a single model registry.
+This guide covers setting up multiple AI model providers including OpenRouter, custom API endpoints, and local model servers. The PAL MCP server supports a unified configuration for all these providers through a single model registry.
 
 ## Supported Providers
 
@@ -35,27 +35,37 @@ This guide covers setting up multiple AI model providers including OpenRouter, c
 
 ## Model Aliases
 
-Zen ships two registries:
+PAL ships multiple registries:
 
-- `conf/openrouter_models.json` – metadata for models routed through OpenRouter. Override with `OPENROUTER_MODELS_CONFIG_PATH` if you maintain a custom copy.
-- `conf/custom_models.json` – metadata for local or self-hosted OpenAI-compatible endpoints used by the Custom provider. Override with `CUSTOM_MODELS_CONFIG_PATH` if needed.
+- `conf/openai_models.json` – native OpenAI catalogue (override with `OPENAI_MODELS_CONFIG_PATH`)
+- `conf/gemini_models.json` – native Google Gemini catalogue (`GEMINI_MODELS_CONFIG_PATH`)
+- `conf/xai_models.json` – native X.AI / GROK catalogue (`XAI_MODELS_CONFIG_PATH`)
+- `conf/openrouter_models.json` – OpenRouter catalogue (`OPENROUTER_MODELS_CONFIG_PATH`)
+- `conf/dial_models.json` – DIAL aggregation catalogue (`DIAL_MODELS_CONFIG_PATH`)
+- `conf/custom_models.json` – local/self-hosted OpenAI-compatible catalogue (`CUSTOM_MODELS_CONFIG_PATH`)
 
 Copy whichever file you need into your project (or point the corresponding `*_MODELS_CONFIG_PATH` env var at your own copy) and edit it to advertise the models you want.
 
 ### OpenRouter Models (Cloud)
 
-| Alias | Maps to OpenRouter Model |
-|-------|-------------------------|
-| `opus` | `anthropic/claude-opus-4` |
-| `sonnet`, `claude` | `anthropic/claude-sonnet-4` |
-| `haiku` | `anthropic/claude-3.5-haiku` |
-| `gpt4o`, `4o` | `openai/gpt-4o` |
-| `gpt4o-mini`, `4o-mini` | `openai/gpt-4o-mini` |
-| `pro`, `gemini` | `google/gemini-2.5-pro` |
-| `flash` | `google/gemini-2.5-flash` |
-| `mistral` | `mistral/mistral-large` |
-| `deepseek`, `coder` | `deepseek/deepseek-coder` |
-| `perplexity` | `perplexity/llama-3-sonar-large-32k-online` |
+The curated defaults in `conf/openrouter_models.json` include popular entries such as:
+
+| Alias | Canonical Model | Highlights |
+|-------|-----------------|------------|
+| `opus`, `claude-opus` | `anthropic/claude-opus-4.1` | Flagship Claude reasoning model with vision |
+| `sonnet`, `sonnet4.5` | `anthropic/claude-sonnet-4.5` | Balanced Claude with high context window |
+| `haiku` | `anthropic/claude-3.5-haiku` | Fast Claude option with vision |
+| `pro`, `gemini` | `google/gemini-2.5-pro` | Frontier Gemini with extended thinking |
+| `flash` | `google/gemini-2.5-flash` | Ultra-fast Gemini with vision |
+| `mistral` | `mistralai/mistral-large-2411` | Frontier Mistral (text only) |
+| `llama3` | `meta-llama/llama-3-70b` | Large open-weight text model |
+| `deepseek-r1` | `deepseek/deepseek-r1-0528` | DeepSeek reasoning model |
+| `perplexity` | `perplexity/llama-3-sonar-large-32k-online` | Search-augmented model |
+| `gpt5.2`, `gpt-5.2`, `5.2` | `openai/gpt-5.2` | Flagship GPT-5.2 with reasoning and vision |
+| `gpt5.1-codex`, `codex-5.1` | `openai/gpt-5.1-codex` | Agentic coding specialization (Responses API) |
+| `codex-mini`, `gpt5.1-codex-mini` | `openai/gpt-5.1-codex-mini` | Cost-efficient Codex variant with streaming |
+
+Consult the JSON file for the full list, aliases, and capability flags. Add new entries as OpenRouter releases additional models.
 
 ### Custom/Local Models
 
@@ -64,6 +74,26 @@ Copy whichever file you need into your project (or point the corresponding `*_MO
 | `local-llama`, `local` | `llama3.2` | Requires `CUSTOM_API_URL` configured |
 
 View the baseline OpenRouter catalogue in [`conf/openrouter_models.json`](conf/openrouter_models.json) and populate [`conf/custom_models.json`](conf/custom_models.json) with your local models.
+
+Native catalogues (`conf/openai_models.json`, `conf/gemini_models.json`, `conf/xai_models.json`, `conf/dial_models.json`) follow the same schema. Updating those files lets you:
+
+- Expose new aliases (e.g., map `enterprise-pro` to `gpt-5.2-pro`)
+- Advertise support for JSON mode or vision if the upstream provider adds it
+- Adjust token limits when providers increase context windows
+
+### Latest OpenAI releases
+
+OpenAI's November 13, 2025 drop introduced `gpt-5.1-codex` and `gpt-5.1-codex-mini`, while the flagship base model is now `gpt-5.2`. All of these ship in `conf/openai_models.json`:
+
+| Model | Highlights | Notes |
+|-------|------------|-------|
+| `gpt-5.2` | 400K context, 128K output, multimodal IO, configurable reasoning effort | Streaming enabled; use for balanced agent/coding flows |
+| `gpt-5.1-codex` | Responses-only agentic coding version of GPT-5.1 | Streaming disabled; `use_openai_response_api=true`; `allow_code_generation=true` |
+| `gpt-5.1-codex-mini` | Cost-efficient Codex variant | Streaming enabled, retains 400K context and code-generation flag |
+
+These entries include pricing-friendly aliases (`gpt5.2`, `codex-5.1`, `codex-mini`) plus updated capability flags (`supports_extended_thinking`, `allow_code_generation`). Copy the manifest if you operate custom deployment names so downstream providers inherit the same metadata.
+
+Because providers load the manifests on import, you can tweak capabilities without touching Python. Restart the server after editing the JSON files so changes are picked up.
 
 To control ordering in auto mode or the `listmodels` summary, adjust the
 [`intelligence_score`](model_ranking.md) for each entry (or rely on the automatic
@@ -118,7 +148,7 @@ CUSTOM_MODEL_NAME=llama3.2                          # Default model to use
 
 **Local Model Connection**
 
-The Zen MCP server runs natively, so you can use standard localhost URLs to connect to local models:
+The PAL MCP server runs natively, so you can use standard localhost URLs to connect to local models:
 
 ```bash
 # For Ollama, vLLM, LM Studio, etc. running on your machine
@@ -162,9 +192,9 @@ CUSTOM_MODEL_NAME=your-loaded-model
 # OpenRouter models:
 "Use opus for deep analysis"         # → anthropic/claude-opus-4
 "Use sonnet to review this code"     # → anthropic/claude-sonnet-4
-"Use pro via zen to analyze this"    # → google/gemini-2.5-pro
-"Use gpt4o via zen to analyze this"  # → openai/gpt-4o
-"Use mistral via zen to optimize"    # → mistral/mistral-large
+"Use pro via pal to analyze this"    # → google/gemini-2.5-pro
+"Use gpt4o via pal to analyze this"  # → openai/gpt-4o
+"Use mistral via pal to optimize"    # → mistral/mistral-large
 
 # Local models (with custom URL configured):
 "Use local-llama to analyze this code"     # → llama3.2 (local)
@@ -174,13 +204,13 @@ CUSTOM_MODEL_NAME=your-loaded-model
 **Using full model names:**
 ```
 # OpenRouter models:
-"Use anthropic/claude-opus-4 via zen for deep analysis"
-"Use openai/gpt-4o via zen to debug this"
-"Use deepseek/deepseek-coder via zen to generate code"
+"Use anthropic/claude-opus-4 via pal for deep analysis"
+"Use openai/gpt-4o via pal to debug this"
+"Use deepseek/deepseek-coder via pal to generate code"
 
 # Local/custom models:
-"Use llama3.2 via zen to review this"
-"Use meta-llama/Llama-2-7b-chat-hf via zen to analyze"
+"Use llama3.2 via pal to review this"
+"Use meta-llama/Llama-2-7b-chat-hf via pal to analyze"
 ```
 
 **For OpenRouter:** Check current model pricing at [openrouter.ai/models](https://openrouter.ai/models).  
